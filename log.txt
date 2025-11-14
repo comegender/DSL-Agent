@@ -1,0 +1,17 @@
+commit 5518de9cab417b4151737d7e1a9cef360cb385fa
+Author: comegender <3517999384@qq.com>
+Date:   Sun Sep 21 12:47:00 2025 +0800
+
+    修改后代使用语言为python，并初步接入AI-api
+
+commit aeba369c84b02bb09e07c509664d77e9439b6a4e
+Author: comegender <3517999384@qq.com>
+Date:   Fri Sep 19 21:07:24 2025 +0800
+
+    脚本语言初步设计
+
+commit b01a4ab6e37ef76d92719764d9cc90845c34241b
+Author: comegender <152296689+comegender@users.noreply.github.com>
+Date:   Thu Sep 11 21:35:20 2025 +0800
+
+    Initial commit
