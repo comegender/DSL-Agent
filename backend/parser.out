@@ -1,0 +1,733 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    NEWLINE
+    RESPONSE
+
+Grammar
+
+Rule 0     S' -> script
+Rule 1     script -> do_module
+Rule 2     script -> script do_module
+Rule 3     do_module -> DO ID LBRACE c RBRACE
+Rule 4     c -> statement
+Rule 5     c -> c statement
+Rule 6     statement -> SET ID EQUALS expr SEMICOLON
+Rule 7     statement -> SPEAK STRING SEMICOLON
+Rule 8     statement -> JUMP ID SEMICOLON
+Rule 9     statement -> IF LPAREN condition RPAREN LBRACE c RBRACE
+Rule 10    statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+Rule 11    condition -> expr EQEQ expr
+Rule 12    condition -> expr NOTEQ expr
+Rule 13    condition -> expr GREATER expr
+Rule 14    condition -> expr LESS expr
+Rule 15    condition -> expr GREATEREQ expr
+Rule 16    condition -> expr LESSEQ expr
+Rule 17    statement -> CALL ID SEMICOLON
+Rule 18    condition -> expr
+Rule 19    expr -> ID
+Rule 20    expr -> CALL ID
+Rule 21    expr -> STRING
+Rule 22    expr -> VARIABLE
+Rule 23    expr -> NUMBER
+
+Terminals, with rules where they appear
+
+CALL                 : 17 20
+DO                   : 3
+ELSE                 : 10
+EQEQ                 : 11
+EQUALS               : 6
+GREATER              : 13
+GREATEREQ            : 15
+ID                   : 3 6 8 17 19 20
+IF                   : 9 10
+JUMP                 : 8
+LBRACE               : 3 9 10 10
+LESS                 : 14
+LESSEQ               : 16
+LPAREN               : 9 10
+NEWLINE              : 
+NOTEQ                : 12
+NUMBER               : 23
+RBRACE               : 3 9 10 10
+RESPONSE             : 
+RPAREN               : 9 10
+SEMICOLON            : 6 7 8 17
+SET                  : 6
+SPEAK                : 7
+STRING               : 7 21
+VARIABLE             : 22
+error                : 
+
+Nonterminals, with rules where they appear
+
+c                    : 3 5 9 10 10
+condition            : 9 10
+do_module            : 1 2
+expr                 : 6 11 11 12 12 13 13 14 14 15 15 16 16 18
+script               : 2 0
+statement            : 4 5
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . script
+    (1) script -> . do_module
+    (2) script -> . script do_module
+    (3) do_module -> . DO ID LBRACE c RBRACE
+
+    DO              shift and go to state 3
+
+    script                         shift and go to state 1
+    do_module                      shift and go to state 2
+
+state 1
+
+    (0) S' -> script .
+    (2) script -> script . do_module
+    (3) do_module -> . DO ID LBRACE c RBRACE
+
+    DO              shift and go to state 3
+
+    do_module                      shift and go to state 4
+
+state 2
+
+    (1) script -> do_module .
+
+    DO              reduce using rule 1 (script -> do_module .)
+    $end            reduce using rule 1 (script -> do_module .)
+
+
+state 3
+
+    (3) do_module -> DO . ID LBRACE c RBRACE
+
+    ID              shift and go to state 5
+
+
+state 4
+
+    (2) script -> script do_module .
+
+    DO              reduce using rule 2 (script -> script do_module .)
+    $end            reduce using rule 2 (script -> script do_module .)
+
+
+state 5
+
+    (3) do_module -> DO ID . LBRACE c RBRACE
+
+    LBRACE          shift and go to state 6
+
+
+state 6
+
+    (3) do_module -> DO ID LBRACE . c RBRACE
+    (4) c -> . statement
+    (5) c -> . c statement
+    (6) statement -> . SET ID EQUALS expr SEMICOLON
+    (7) statement -> . SPEAK STRING SEMICOLON
+    (8) statement -> . JUMP ID SEMICOLON
+    (9) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE
+    (10) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+    (17) statement -> . CALL ID SEMICOLON
+
+    SET             shift and go to state 9
+    SPEAK           shift and go to state 10
+    JUMP            shift and go to state 11
+    IF              shift and go to state 12
+    CALL            shift and go to state 13
+
+    c                              shift and go to state 7
+    statement                      shift and go to state 8
+
+state 7
+
+    (3) do_module -> DO ID LBRACE c . RBRACE
+    (5) c -> c . statement
+    (6) statement -> . SET ID EQUALS expr SEMICOLON
+    (7) statement -> . SPEAK STRING SEMICOLON
+    (8) statement -> . JUMP ID SEMICOLON
+    (9) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE
+    (10) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+    (17) statement -> . CALL ID SEMICOLON
+
+    RBRACE          shift and go to state 14
+    SET             shift and go to state 9
+    SPEAK           shift and go to state 10
+    JUMP            shift and go to state 11
+    IF              shift and go to state 12
+    CALL            shift and go to state 13
+
+    statement                      shift and go to state 15
+
+state 8
+
+    (4) c -> statement .
+
+    RBRACE          reduce using rule 4 (c -> statement .)
+    SET             reduce using rule 4 (c -> statement .)
+    SPEAK           reduce using rule 4 (c -> statement .)
+    JUMP            reduce using rule 4 (c -> statement .)
+    IF              reduce using rule 4 (c -> statement .)
+    CALL            reduce using rule 4 (c -> statement .)
+
+
+state 9
+
+    (6) statement -> SET . ID EQUALS expr SEMICOLON
+
+    ID              shift and go to state 16
+
+
+state 10
+
+    (7) statement -> SPEAK . STRING SEMICOLON
+
+    STRING          shift and go to state 17
+
+
+state 11
+
+    (8) statement -> JUMP . ID SEMICOLON
+
+    ID              shift and go to state 18
+
+
+state 12
+
+    (9) statement -> IF . LPAREN condition RPAREN LBRACE c RBRACE
+    (10) statement -> IF . LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+
+    LPAREN          shift and go to state 19
+
+
+state 13
+
+    (17) statement -> CALL . ID SEMICOLON
+
+    ID              shift and go to state 20
+
+
+state 14
+
+    (3) do_module -> DO ID LBRACE c RBRACE .
+
+    DO              reduce using rule 3 (do_module -> DO ID LBRACE c RBRACE .)
+    $end            reduce using rule 3 (do_module -> DO ID LBRACE c RBRACE .)
+
+
+state 15
+
+    (5) c -> c statement .
+
+    RBRACE          reduce using rule 5 (c -> c statement .)
+    SET             reduce using rule 5 (c -> c statement .)
+    SPEAK           reduce using rule 5 (c -> c statement .)
+    JUMP            reduce using rule 5 (c -> c statement .)
+    IF              reduce using rule 5 (c -> c statement .)
+    CALL            reduce using rule 5 (c -> c statement .)
+
+
+state 16
+
+    (6) statement -> SET ID . EQUALS expr SEMICOLON
+
+    EQUALS          shift and go to state 21
+
+
+state 17
+
+    (7) statement -> SPEAK STRING . SEMICOLON
+
+    SEMICOLON       shift and go to state 22
+
+
+state 18
+
+    (8) statement -> JUMP ID . SEMICOLON
+
+    SEMICOLON       shift and go to state 23
+
+
+state 19
+
+    (9) statement -> IF LPAREN . condition RPAREN LBRACE c RBRACE
+    (10) statement -> IF LPAREN . condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+    (11) condition -> . expr EQEQ expr
+    (12) condition -> . expr NOTEQ expr
+    (13) condition -> . expr GREATER expr
+    (14) condition -> . expr LESS expr
+    (15) condition -> . expr GREATEREQ expr
+    (16) condition -> . expr LESSEQ expr
+    (18) condition -> . expr
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    condition                      shift and go to state 24
+    expr                           shift and go to state 25
+
+state 20
+
+    (17) statement -> CALL ID . SEMICOLON
+
+    SEMICOLON       shift and go to state 31
+
+
+state 21
+
+    (6) statement -> SET ID EQUALS . expr SEMICOLON
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    expr                           shift and go to state 32
+
+state 22
+
+    (7) statement -> SPEAK STRING SEMICOLON .
+
+    RBRACE          reduce using rule 7 (statement -> SPEAK STRING SEMICOLON .)
+    SET             reduce using rule 7 (statement -> SPEAK STRING SEMICOLON .)
+    SPEAK           reduce using rule 7 (statement -> SPEAK STRING SEMICOLON .)
+    JUMP            reduce using rule 7 (statement -> SPEAK STRING SEMICOLON .)
+    IF              reduce using rule 7 (statement -> SPEAK STRING SEMICOLON .)
+    CALL            reduce using rule 7 (statement -> SPEAK STRING SEMICOLON .)
+
+
+state 23
+
+    (8) statement -> JUMP ID SEMICOLON .
+
+    RBRACE          reduce using rule 8 (statement -> JUMP ID SEMICOLON .)
+    SET             reduce using rule 8 (statement -> JUMP ID SEMICOLON .)
+    SPEAK           reduce using rule 8 (statement -> JUMP ID SEMICOLON .)
+    JUMP            reduce using rule 8 (statement -> JUMP ID SEMICOLON .)
+    IF              reduce using rule 8 (statement -> JUMP ID SEMICOLON .)
+    CALL            reduce using rule 8 (statement -> JUMP ID SEMICOLON .)
+
+
+state 24
+
+    (9) statement -> IF LPAREN condition . RPAREN LBRACE c RBRACE
+    (10) statement -> IF LPAREN condition . RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+
+    RPAREN          shift and go to state 33
+
+
+state 25
+
+    (11) condition -> expr . EQEQ expr
+    (12) condition -> expr . NOTEQ expr
+    (13) condition -> expr . GREATER expr
+    (14) condition -> expr . LESS expr
+    (15) condition -> expr . GREATEREQ expr
+    (16) condition -> expr . LESSEQ expr
+    (18) condition -> expr .
+
+    EQEQ            shift and go to state 34
+    NOTEQ           shift and go to state 35
+    GREATER         shift and go to state 36
+    LESS            shift and go to state 37
+    GREATEREQ       shift and go to state 38
+    LESSEQ          shift and go to state 39
+    RPAREN          reduce using rule 18 (condition -> expr .)
+
+
+state 26
+
+    (19) expr -> ID .
+
+    EQEQ            reduce using rule 19 (expr -> ID .)
+    NOTEQ           reduce using rule 19 (expr -> ID .)
+    GREATER         reduce using rule 19 (expr -> ID .)
+    LESS            reduce using rule 19 (expr -> ID .)
+    GREATEREQ       reduce using rule 19 (expr -> ID .)
+    LESSEQ          reduce using rule 19 (expr -> ID .)
+    RPAREN          reduce using rule 19 (expr -> ID .)
+    SEMICOLON       reduce using rule 19 (expr -> ID .)
+
+
+state 27
+
+    (20) expr -> CALL . ID
+
+    ID              shift and go to state 40
+
+
+state 28
+
+    (21) expr -> STRING .
+
+    EQEQ            reduce using rule 21 (expr -> STRING .)
+    NOTEQ           reduce using rule 21 (expr -> STRING .)
+    GREATER         reduce using rule 21 (expr -> STRING .)
+    LESS            reduce using rule 21 (expr -> STRING .)
+    GREATEREQ       reduce using rule 21 (expr -> STRING .)
+    LESSEQ          reduce using rule 21 (expr -> STRING .)
+    RPAREN          reduce using rule 21 (expr -> STRING .)
+    SEMICOLON       reduce using rule 21 (expr -> STRING .)
+
+
+state 29
+
+    (22) expr -> VARIABLE .
+
+    EQEQ            reduce using rule 22 (expr -> VARIABLE .)
+    NOTEQ           reduce using rule 22 (expr -> VARIABLE .)
+    GREATER         reduce using rule 22 (expr -> VARIABLE .)
+    LESS            reduce using rule 22 (expr -> VARIABLE .)
+    GREATEREQ       reduce using rule 22 (expr -> VARIABLE .)
+    LESSEQ          reduce using rule 22 (expr -> VARIABLE .)
+    RPAREN          reduce using rule 22 (expr -> VARIABLE .)
+    SEMICOLON       reduce using rule 22 (expr -> VARIABLE .)
+
+
+state 30
+
+    (23) expr -> NUMBER .
+
+    EQEQ            reduce using rule 23 (expr -> NUMBER .)
+    NOTEQ           reduce using rule 23 (expr -> NUMBER .)
+    GREATER         reduce using rule 23 (expr -> NUMBER .)
+    LESS            reduce using rule 23 (expr -> NUMBER .)
+    GREATEREQ       reduce using rule 23 (expr -> NUMBER .)
+    LESSEQ          reduce using rule 23 (expr -> NUMBER .)
+    RPAREN          reduce using rule 23 (expr -> NUMBER .)
+    SEMICOLON       reduce using rule 23 (expr -> NUMBER .)
+
+
+state 31
+
+    (17) statement -> CALL ID SEMICOLON .
+
+    RBRACE          reduce using rule 17 (statement -> CALL ID SEMICOLON .)
+    SET             reduce using rule 17 (statement -> CALL ID SEMICOLON .)
+    SPEAK           reduce using rule 17 (statement -> CALL ID SEMICOLON .)
+    JUMP            reduce using rule 17 (statement -> CALL ID SEMICOLON .)
+    IF              reduce using rule 17 (statement -> CALL ID SEMICOLON .)
+    CALL            reduce using rule 17 (statement -> CALL ID SEMICOLON .)
+
+
+state 32
+
+    (6) statement -> SET ID EQUALS expr . SEMICOLON
+
+    SEMICOLON       shift and go to state 41
+
+
+state 33
+
+    (9) statement -> IF LPAREN condition RPAREN . LBRACE c RBRACE
+    (10) statement -> IF LPAREN condition RPAREN . LBRACE c RBRACE ELSE LBRACE c RBRACE
+
+    LBRACE          shift and go to state 42
+
+
+state 34
+
+    (11) condition -> expr EQEQ . expr
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    expr                           shift and go to state 43
+
+state 35
+
+    (12) condition -> expr NOTEQ . expr
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    expr                           shift and go to state 44
+
+state 36
+
+    (13) condition -> expr GREATER . expr
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    expr                           shift and go to state 45
+
+state 37
+
+    (14) condition -> expr LESS . expr
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    expr                           shift and go to state 46
+
+state 38
+
+    (15) condition -> expr GREATEREQ . expr
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    expr                           shift and go to state 47
+
+state 39
+
+    (16) condition -> expr LESSEQ . expr
+    (19) expr -> . ID
+    (20) expr -> . CALL ID
+    (21) expr -> . STRING
+    (22) expr -> . VARIABLE
+    (23) expr -> . NUMBER
+
+    ID              shift and go to state 26
+    CALL            shift and go to state 27
+    STRING          shift and go to state 28
+    VARIABLE        shift and go to state 29
+    NUMBER          shift and go to state 30
+
+    expr                           shift and go to state 48
+
+state 40
+
+    (20) expr -> CALL ID .
+
+    EQEQ            reduce using rule 20 (expr -> CALL ID .)
+    NOTEQ           reduce using rule 20 (expr -> CALL ID .)
+    GREATER         reduce using rule 20 (expr -> CALL ID .)
+    LESS            reduce using rule 20 (expr -> CALL ID .)
+    GREATEREQ       reduce using rule 20 (expr -> CALL ID .)
+    LESSEQ          reduce using rule 20 (expr -> CALL ID .)
+    RPAREN          reduce using rule 20 (expr -> CALL ID .)
+    SEMICOLON       reduce using rule 20 (expr -> CALL ID .)
+
+
+state 41
+
+    (6) statement -> SET ID EQUALS expr SEMICOLON .
+
+    RBRACE          reduce using rule 6 (statement -> SET ID EQUALS expr SEMICOLON .)
+    SET             reduce using rule 6 (statement -> SET ID EQUALS expr SEMICOLON .)
+    SPEAK           reduce using rule 6 (statement -> SET ID EQUALS expr SEMICOLON .)
+    JUMP            reduce using rule 6 (statement -> SET ID EQUALS expr SEMICOLON .)
+    IF              reduce using rule 6 (statement -> SET ID EQUALS expr SEMICOLON .)
+    CALL            reduce using rule 6 (statement -> SET ID EQUALS expr SEMICOLON .)
+
+
+state 42
+
+    (9) statement -> IF LPAREN condition RPAREN LBRACE . c RBRACE
+    (10) statement -> IF LPAREN condition RPAREN LBRACE . c RBRACE ELSE LBRACE c RBRACE
+    (4) c -> . statement
+    (5) c -> . c statement
+    (6) statement -> . SET ID EQUALS expr SEMICOLON
+    (7) statement -> . SPEAK STRING SEMICOLON
+    (8) statement -> . JUMP ID SEMICOLON
+    (9) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE
+    (10) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+    (17) statement -> . CALL ID SEMICOLON
+
+    SET             shift and go to state 9
+    SPEAK           shift and go to state 10
+    JUMP            shift and go to state 11
+    IF              shift and go to state 12
+    CALL            shift and go to state 13
+
+    c                              shift and go to state 49
+    statement                      shift and go to state 8
+
+state 43
+
+    (11) condition -> expr EQEQ expr .
+
+    RPAREN          reduce using rule 11 (condition -> expr EQEQ expr .)
+
+
+state 44
+
+    (12) condition -> expr NOTEQ expr .
+
+    RPAREN          reduce using rule 12 (condition -> expr NOTEQ expr .)
+
+
+state 45
+
+    (13) condition -> expr GREATER expr .
+
+    RPAREN          reduce using rule 13 (condition -> expr GREATER expr .)
+
+
+state 46
+
+    (14) condition -> expr LESS expr .
+
+    RPAREN          reduce using rule 14 (condition -> expr LESS expr .)
+
+
+state 47
+
+    (15) condition -> expr GREATEREQ expr .
+
+    RPAREN          reduce using rule 15 (condition -> expr GREATEREQ expr .)
+
+
+state 48
+
+    (16) condition -> expr LESSEQ expr .
+
+    RPAREN          reduce using rule 16 (condition -> expr LESSEQ expr .)
+
+
+state 49
+
+    (9) statement -> IF LPAREN condition RPAREN LBRACE c . RBRACE
+    (10) statement -> IF LPAREN condition RPAREN LBRACE c . RBRACE ELSE LBRACE c RBRACE
+    (5) c -> c . statement
+    (6) statement -> . SET ID EQUALS expr SEMICOLON
+    (7) statement -> . SPEAK STRING SEMICOLON
+    (8) statement -> . JUMP ID SEMICOLON
+    (9) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE
+    (10) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+    (17) statement -> . CALL ID SEMICOLON
+
+    RBRACE          shift and go to state 50
+    SET             shift and go to state 9
+    SPEAK           shift and go to state 10
+    JUMP            shift and go to state 11
+    IF              shift and go to state 12
+    CALL            shift and go to state 13
+
+    statement                      shift and go to state 15
+
+state 50
+
+    (9) statement -> IF LPAREN condition RPAREN LBRACE c RBRACE .
+    (10) statement -> IF LPAREN condition RPAREN LBRACE c RBRACE . ELSE LBRACE c RBRACE
+
+    RBRACE          reduce using rule 9 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE .)
+    SET             reduce using rule 9 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE .)
+    SPEAK           reduce using rule 9 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE .)
+    JUMP            reduce using rule 9 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE .)
+    IF              reduce using rule 9 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE .)
+    CALL            reduce using rule 9 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE .)
+    ELSE            shift and go to state 51
+
+
+state 51
+
+    (10) statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE . LBRACE c RBRACE
+
+    LBRACE          shift and go to state 52
+
+
+state 52
+
+    (10) statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE . c RBRACE
+    (4) c -> . statement
+    (5) c -> . c statement
+    (6) statement -> . SET ID EQUALS expr SEMICOLON
+    (7) statement -> . SPEAK STRING SEMICOLON
+    (8) statement -> . JUMP ID SEMICOLON
+    (9) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE
+    (10) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+    (17) statement -> . CALL ID SEMICOLON
+
+    SET             shift and go to state 9
+    SPEAK           shift and go to state 10
+    JUMP            shift and go to state 11
+    IF              shift and go to state 12
+    CALL            shift and go to state 13
+
+    c                              shift and go to state 53
+    statement                      shift and go to state 8
+
+state 53
+
+    (10) statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c . RBRACE
+    (5) c -> c . statement
+    (6) statement -> . SET ID EQUALS expr SEMICOLON
+    (7) statement -> . SPEAK STRING SEMICOLON
+    (8) statement -> . JUMP ID SEMICOLON
+    (9) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE
+    (10) statement -> . IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE
+    (17) statement -> . CALL ID SEMICOLON
+
+    RBRACE          shift and go to state 54
+    SET             shift and go to state 9
+    SPEAK           shift and go to state 10
+    JUMP            shift and go to state 11
+    IF              shift and go to state 12
+    CALL            shift and go to state 13
+
+    statement                      shift and go to state 15
+
+state 54
+
+    (10) statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE .
+
+    RBRACE          reduce using rule 10 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE .)
+    SET             reduce using rule 10 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE .)
+    SPEAK           reduce using rule 10 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE .)
+    JUMP            reduce using rule 10 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE .)
+    IF              reduce using rule 10 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE .)
+    CALL            reduce using rule 10 (statement -> IF LPAREN condition RPAREN LBRACE c RBRACE ELSE LBRACE c RBRACE .)
+
