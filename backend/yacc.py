@@ -1,6 +1,8 @@
 import ply.yacc as yacc
-from lex import tokens
 import warnings
+from . import AI_api
+from . import test_script
+from .lex import tokens
 
 def p_script(p):
     '''script : do_module
@@ -111,15 +113,18 @@ def p_expr_literal(p):
 # ========== 构建解析器 ==========
 parser = yacc.yacc()
 
-# ========== 测试输入：你的多语句 DSL 示例（简化版，不含 if/else） ==========
-s = 
+def print_tree(x):
+    resp = AI_api.get_response(x)
+    s=test_script.get_script(resp)
 
+    # ========== 执行解析 ==========
+    result = parser.parse(s)
 
-# ========== 执行解析 ==========
-result = parser.parse(s)
+    # ========== 打印语法树 ==========
+    print("🔍 生成的语法树结构如下：")
+    import pprint
+    pprint.pprint(result, indent=2)
+    warnings.filterwarnings("ignore")
 
-# ========== 打印语法树 ==========
-print("🔍 生成的语法树结构如下：")
-import pprint
-pprint.pprint(result, indent=2)
-warnings.filterwarnings("ignore")
+if __name__ == "__main__":
+    print_tree()

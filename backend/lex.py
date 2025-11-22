@@ -1,5 +1,4 @@
 import ply.lex as lex
-import AI_api
 
 # 词法分析器部分
 tokens = (
