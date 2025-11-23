@@ -77,7 +77,11 @@ def p_condition_compare(p):
                  | expr LESS expr
                  | expr GREATEREQ expr
                  | expr LESSEQ expr'''
-    p[0] = f"{p[1]} {p[2]} {p[3]}"
+    p[0] = {
+        'left': p[1],
+        'operation': p[2],
+        'right': p[3]
+    }
 
 def p_statement_call(p):
     '''statement : CALL ID SEMICOLON'''
@@ -85,7 +89,6 @@ def p_statement_call(p):
         'type': 'call_statement',
         'function': p[2]
     }
-
 
 
 def p_condition_expr(p):
@@ -118,6 +121,18 @@ def print_tree(x):
     s=test_script.get_script(resp)
 
     # ========== 执行解析 ==========
+    result = parser.parse(s)
+
+    # ========== 打印语法树 ==========
+    print("🔍 生成的语法树结构如下：")
+    import pprint
+    pprint.pprint(result, indent=2)
+    warnings.filterwarnings("ignore")
+
+
+def jump_to(x):
+    s=test_script.get_script_en(x)
+        # ========== 执行解析 ==========
     result = parser.parse(s)
 
     # ========== 打印语法树 ==========
