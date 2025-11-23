@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客服聊天 - 智能客服机器人</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container chat-container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">🤖</div>
+                <h1>智能客服机器人</h1>
+            </div>
+            <div class="user-info">
+                <span id="current-user">用户</span>
+                <button id="logout-btn" class="btn small">退出</button>
+            </div>
+        </header>
+        
+        <main class="chat-area">
+            <div class="messages" id="message-container">
+                <div class="message bot">
+                    <div class="avatar">🤖</div>
+                    <div class="content">
+                        <p>您好！我是智能客服助手，请问有什么可以帮您？</p>
+                        <span class="time">10:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-area">
+                <textarea id="user-input" placeholder="请输入您的问题..." rows="1"></textarea>
+                <button id="send-btn" class="btn primary">发送</button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 智能客服机器人 | 在线客服</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
