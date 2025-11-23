@@ -134,12 +134,7 @@ def jump_to(x):
     s=test_script.get_script_en(x)
         # ========== 执行解析 ==========
     result = parser.parse(s)
-
-    # ========== 打印语法树 ==========
-    print("🔍 生成的语法树结构如下：")
-    import pprint
-    pprint.pprint(result, indent=2)
-    warnings.filterwarnings("ignore")
+    return result
 
 if __name__ == "__main__":
     print_tree()
