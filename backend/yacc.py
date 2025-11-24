@@ -116,18 +116,18 @@ def p_expr_literal(p):
 # ========== 构建解析器 ==========
 parser = yacc.yacc()
 
-def print_tree(x):
-    resp = AI_api.get_response(x)
-    s=test_script.get_script(resp)
+def get_tree(x):
+    s=test_script.get_script(x)
 
     # ========== 执行解析 ==========
     result = parser.parse(s)
 
-    # ========== 打印语法树 ==========
-    print("🔍 生成的语法树结构如下：")
-    import pprint
-    pprint.pprint(result, indent=2)
-    warnings.filterwarnings("ignore")
+    return result
+    # # ========== 打印语法树 ==========
+    # print("🔍 生成的语法树结构如下：")
+    # import pprint
+    # pprint.pprint(result, indent=2)
+    # warnings.filterwarnings("ignore")
 
 
 def jump_to(x):
@@ -137,4 +137,4 @@ def jump_to(x):
     return result
 
 if __name__ == "__main__":
-    print_tree()
+    get_tree()
