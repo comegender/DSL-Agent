@@ -246,16 +246,18 @@ def Login(username, password):
 
         if not result:
             print(f"🤖:登录失败：用户 '{username}' 不存在")
+            global ISLOGIN
+            ISLOGIN = False
             return False
 
         stored_password = result['password']
 
         if password == stored_password:
-            global ISLOGIN
             ISLOGIN = True
             return True
         else:
             print(f"🤖:登录失败：用户 '{username}' 密码错误")
+            ISLOGIN = False
             return False
 
     except Error as e:
@@ -357,6 +359,8 @@ def writeCA(username, complaint, advice):
             connection.close()
 
 def EX():
+    global ISLOGIN
+    ISLOGIN = False
     print("🤖:感谢使用，再见！")
     tui_manager = TUIManager()
     tui_manager.show_exit_animation()

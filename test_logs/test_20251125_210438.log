@@ -1,0 +1,43 @@
+2025-11-25 21:04:39,174 [INFO] Test: tests/test_ai_api.py::test_ai_api_basic - PASSED
+2025-11-25 21:04:39,177 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_recharge - PASSED
+2025-11-25 21:04:39,179 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_help - PASSED
+2025-11-25 21:04:39,181 [INFO] Test: tests/test_ai_api.py::test_ai_api_unknown_intent - PASSED
+2025-11-25 21:04:39,183 [INFO] Test: tests/test_function_interface.py::test_get_user_input - PASSED
+2025-11-25 21:04:39,185 [INFO] Test: tests/test_function_interface.py::test_login_success - PASSED
+2025-11-25 21:04:39,287 [INFO] Test: tests/test_function_interface.py::test_login_failure - FAILED
+2025-11-25 21:04:39,288 [ERROR] Test failed: tests/test_function_interface.py::test_login_failure
+2025-11-25 21:04:39,288 [ERROR] Error details:
+def test_login_failure():
+        """测试登录失败情况"""
+        # 模拟密码错误
+        mock_cursor = MagicMock()
+        mock_cursor.fetchone.return_value = {'username': '111', 'password': '123456'}
+    
+        mock_connection = MagicMock()
+        mock_connection.cursor.return_value = mock_cursor
+    
+        with patch('backend.function_interface.mysql.connector.connect', return_value=mock_connection):
+            result = Login('test', 'wrongpass')
+            assert result is False
+>           assert isLogin() is False
+E           assert True is False
+E            +  where True = isLogin()
+
+tests\test_function_interface.py:38: AssertionError
+2025-11-25 21:04:39,291 [INFO] Test: tests/test_function_interface.py::test_register_success - PASSED
+2025-11-25 21:04:39,294 [INFO] Test: tests/test_function_interface.py::test_recharge - PASSED
+2025-11-25 21:04:39,296 [INFO] Test: tests/test_interpreter.py::test_set_statement - PASSED
+2025-11-25 21:04:39,297 [INFO] Test: tests/test_interpreter.py::test_do_statement_speak - PASSED
+2025-11-25 21:04:39,299 [INFO] Test: tests/test_interpreter.py::test_do_statement_if - PASSED
+2025-11-25 21:04:39,305 [INFO] Test: tests/test_interpreter.py::test_jump_statement - PASSED
+2025-11-25 21:04:39,307 [INFO] Test: tests/test_lexer.py::test_lexer_keywords - PASSED
+2025-11-25 21:04:39,309 [INFO] Test: tests/test_lexer.py::test_lexer_operators - PASSED
+2025-11-25 21:04:39,310 [INFO] Test: tests/test_lexer.py::test_lexer_variables - PASSED
+2025-11-25 21:04:39,311 [INFO] Test: tests/test_lexer.py::test_lexer_strings_numbers - PASSED
+2025-11-25 21:04:39,312 [INFO] Test: tests/test_parser.py::test_parse_simple_script - PASSED
+2025-11-25 21:04:39,315 [INFO] Test: tests/test_parser.py::test_parse_if_statement - PASSED
+2025-11-25 21:04:39,317 [INFO] Test: tests/test_parser.py::test_parse_set_statement - PASSED
+2025-11-25 21:04:39,319 [INFO] Test: tests/test_script_processing.py::test_get_script - PASSED
+2025-11-25 21:04:39,320 [INFO] Test: tests/test_script_processing.py::test_get_script_en - PASSED
+2025-11-25 21:04:39,322 [INFO] Test: tests/test_script_processing.py::test_get_tree - PASSED
+2025-11-25 21:04:39,324 [INFO] Test: tests/test_script_processing.py::test_jump_to - PASSED
