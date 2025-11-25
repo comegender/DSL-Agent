@@ -1,0 +1,305 @@
+2025-11-25 22:11:06,408 [INFO] Test: tests/test_ai_api.py::test_ai_api_basic - PASSED
+2025-11-25 22:11:06,411 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_recharge - PASSED
+2025-11-25 22:11:06,413 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_help - PASSED
+2025-11-25 22:11:06,417 [INFO] Test: tests/test_ai_api.py::test_ai_api_unknown_intent - PASSED
+2025-11-25 22:11:06,418 [INFO] Test: tests/test_function_interface.py::test_get_user_input - PASSED
+2025-11-25 22:11:06,421 [INFO] Test: tests/test_function_interface.py::test_login_success - PASSED
+2025-11-25 22:11:06,429 [INFO] Test: tests/test_function_interface.py::test_login_failure - PASSED
+2025-11-25 22:11:06,432 [INFO] Test: tests/test_function_interface.py::test_register_success - PASSED
+2025-11-25 22:11:06,440 [INFO] Test: tests/test_function_interface.py::test_recharge - PASSED
+2025-11-25 22:11:06,442 [INFO] Test: tests/test_interpreter.py::test_set_statement - PASSED
+2025-11-25 22:11:06,444 [INFO] Test: tests/test_interpreter.py::test_do_statement_speak - PASSED
+2025-11-25 22:11:06,446 [INFO] Test: tests/test_interpreter.py::test_do_statement_if - PASSED
+2025-11-25 22:11:06,447 [INFO] Test: tests/test_interpreter.py::test_jump_statement - PASSED
+2025-11-25 22:11:06,450 [INFO] Test: tests/test_lexer.py::test_lexer_keywords - PASSED
+2025-11-25 22:11:06,453 [INFO] Test: tests/test_lexer.py::test_lexer_operators - PASSED
+2025-11-25 22:11:06,454 [INFO] Test: tests/test_lexer.py::test_lexer_variables - PASSED
+2025-11-25 22:11:06,457 [INFO] Test: tests/test_lexer.py::test_lexer_strings_numbers - PASSED
+2025-11-25 22:11:06,459 [INFO] Test: tests/test_parser.py::test_parse_simple_script - PASSED
+2025-11-25 22:11:06,460 [INFO] Test: tests/test_parser.py::test_parse_if_statement - PASSED
+2025-11-25 22:11:06,462 [INFO] Test: tests/test_parser.py::test_parse_set_statement - PASSED
+2025-11-25 22:11:06,465 [INFO] Test: tests/test_script_processing.py::test_get_script - PASSED
+2025-11-25 22:11:06,467 [INFO] Test: tests/test_script_processing.py::test_get_script_en - PASSED
+2025-11-25 22:11:06,469 [INFO] Test: tests/test_script_processing.py::test_get_tree - PASSED
+2025-11-25 22:11:06,470 [INFO] Test: tests/test_script_processing.py::test_jump_to - PASSED
+2025-11-25 22:11:06,611 [INFO] Test: tests/test_stress.py::test_concurrent_login - FAILED
+2025-11-25 22:11:06,611 [ERROR] Test failed: tests/test_stress.py::test_concurrent_login
+2025-11-25 22:11:06,611 [ERROR] Error details:
+def test_concurrent_login():
+        """测试并发登录功能（修复线程本地数据传递问题）"""
+        user_count = 5  # 先减少数量便于调试
+        concurrent_users = 3
+        test_users = generate_test_users(user_count)
+    
+        # 模拟数据库连接和游标
+        mock_cursor = MagicMock()
+        mock_connection = MagicMock()
+        mock_connection.cursor.return_value = mock_cursor
+    
+        # 存储实际执行的SQL查询，用于调试
+        executed_queries = []
+    
+        # ------------------------------
+        # 核心修复：动态获取SQL格式
+        # ------------------------------
+        def mock_execute(query, params=None):
+            # 记录实际执行的查询
+            executed_queries.append((query, params))
+    
+            # 从当前线程的本地存储中获取测试用户列表
+            local_test_users = getattr(thread_local, 'test_users', [])
+    
+            # 调试信息
+            current_thread = threading.current_thread().name
+            print(f"Thread {current_thread}: SQL查询 -> '{query}'")
+            print(f"Thread {current_thread}: 参数 -> {params}")
+            print(f"Thread {current_thread}: 本地用户数 -> {len(local_test_users)}")
+    
+            # 动态匹配登录SQL（不进行标准化处理，直接使用原始查询）
+            # 常见的登录SQL模式
+            login_sql_patterns = [
+                "SELECT username, password FROM users WHERE username = %s AND password = %s",
+                "SELECT username, password FROM users WHERE username = %s and password = %s",  # 小写and
+                "SELECT username, password FROM users WHERE username=%s AND password=%s",     # 无空格
+                "SELECT username, password FROM users WHERE username=%s and password=%s",    # 无空格+小写
+            ]
+    
+            # 检查是否匹配任何登录SQL模式
+            is_login_query = any(pattern in query for pattern in login_sql_patterns)
+    
+            if is_login_query and local_test_users and params:
+                username, password = params
+                print(f"Thread {current_thread}: 尝试登录用户 '{username}'")
+    
+                for user, pwd in local_test_users:
+                    if user == username and pwd == password:
+                        # 为当前线程设置 fetchone 返回值
+                        thread_local.fetchone_result = {'username': username, 'password': password}
+                        print(f"Thread {current_thread}: 登录成功 '{username}'")
+                        return
+    
+            # 默认返回 None（用户不存在或SQL不匹配）
+            thread_local.fetchone_result = None
+            print(f"Thread {current_thread}: 登录失败或SQL不匹配")
+    
+        def mock_fetchone():
+            """从当前线程的本地存储中获取查询结果"""
+            result = getattr(thread_local, 'fetchone_result', None)
+            print(f"Thread {threading.current_thread().name}: fetchone 返回 {result}")
+            return result
+    
+        # 替换 execute 和 fetchone 方法
+        mock_cursor.execute.side_effect = mock_execute
+        mock_cursor.fetchone.side_effect = mock_fetchone
+    
+        with patch('backend.function_interface.mysql.connector.connect', return_value=mock_connection):
+            # 重置全局登录状态
+            from backend.function_interface import ISLOGIN
+            ISLOGIN = False
+    
+            start_time = time.time()
+    
+            # ------------------------------
+            # 改进的Wrapper函数
+            # ------------------------------
+            def login_task_wrapper(user_credentials, all_users):
+                """
+                登录任务的包装函数。
+                """
+                username, password = user_credentials
+                # 每个线程都需要完整的用户列表来进行验证
+                thread_local.test_users = all_users
+                # 重置线程本地的fetchone结果
+                thread_local.fetchone_result = None
+    
+                print(f"Thread {threading.current_thread().name}: 开始处理用户 '{username}'")
+                result = Login(username, password)
+                print(f"Thread {threading.current_thread().name}: 登录结果 '{username}' -> {result}")
+                return result
+    
+            # 并发登录测试
+            with ThreadPoolExecutor(max_workers=concurrent_users) as executor:
+                # 提交任务时，传递用户凭证和完整的用户列表
+                futures = [
+                    executor.submit(login_task_wrapper, user_cred, test_users)
+                    for user_cred in test_users
+                ]
+    
+                success_count = 0
+                error_messages = []
+                for i, future in enumerate(as_completed(futures)):
+                    try:
+                        result = future.result()
+                        if result:
+                            success_count += 1
+                            print(f"任务 {i}: 成功")
+                        else:
+                            print(f"任务 {i}: 失败")
+                    except Exception as e:
+                        error_messages.append(str(e))
+                        print(f"任务 {i}: 异常 - {e}")
+    
+                end_time = time.time()
+                duration = end_time - start_time
+    
+                # 打印调试信息
+                print(f"\n=== 调试信息 ===")
+                print(f"执行的SQL查询:")
+                for i, (query, params) in enumerate(executed_queries):
+                    print(f"{i+1}. {query} | 参数: {params}")
+    
+                # 打印测试结果
+                print(f"\n并发登录测试:")
+                print(f"总用户数: {user_count}")
+                print(f"并发数: {concurrent_users}")
+                print(f"成功数: {success_count}")
+                print(f"成功率: {success_count/user_count*100:.2f}%")
+                print(f"总耗时: {duration:.2f}秒")
+                if error_messages:
+                    print(f"错误信息: {', '.join(list(set(error_messages)))}")
+    
+>               assert success_count == user_count, f"登录成功率错误：预期 {user_count}，实际 {success_count}"
+E               AssertionError: 登录成功率错误：预期 5，实际 0
+E               assert 0 == 5
+
+tests\test_stress.py:156: AssertionError
+2025-11-25 22:11:06,623 [INFO] Test: tests/test_stress.py::test_recharge_stress - FAILED
+2025-11-25 22:11:06,623 [ERROR] Test failed: tests/test_stress.py::test_recharge_stress
+2025-11-25 22:11:06,624 [ERROR] Error details:
+def test_recharge_stress():
+        """测试充值功能压力（修复线程本地数据传递问题）"""
+        test_user = "stress_test_user"
+        test_password = "test_pass"
+        initial_balance = 0.0
+    
+        # 生成 10 个随机金额（先减少数量便于调试）
+        recharge_amounts = [round(random.uniform(10, 100), 2) for _ in range(10)]
+        concurrent_recharges = 5
+    
+        # 模拟数据库连接和游标
+        mock_cursor = MagicMock()
+        mock_connection = MagicMock()
+        mock_connection.cursor.return_value = mock_cursor
+    
+        # 存储执行的SQL查询
+        executed_queries = []
+    
+        # ------------------------------
+        # 改进的线程安全模拟逻辑
+        # ------------------------------
+        def mock_execute(query, params=None):
+            # 记录查询
+            executed_queries.append((query, params))
+    
+            # 获取线程本地数据
+            local_user = getattr(thread_local, 'test_user', None)
+            local_pwd = getattr(thread_local, 'test_password', None)
+    
+            # 确保 balance 是线程本地的
+            if not hasattr(thread_local, 'test_balance'):
+                thread_local.test_balance = initial_balance
+    
+            print(f"执行SQL: '{query}'")
+            print(f"参数: {params}")
+            print(f"本地用户: {local_user}")
+    
+            # 动态匹配SQL模式
+            if query and params:
+                # 登录查询匹配
+                if ("SELECT username, password FROM users WHERE username" in query and
+                    "password" in query and len(params) == 2):
+                    username, password = params
+                    if username == local_user and password == local_pwd:
+                        thread_local.fetchone_result = {'username': local_user, 'password': local_pwd}
+                        print(f"登录查询匹配成功: {username}")
+                    else:
+                        thread_local.fetchone_result = None
+                        print(f"登录查询匹配失败: {username} != {local_user} 或密码不匹配")
+    
+                # 余额查询匹配
+                elif ("SELECT username, remain FROM users WHERE username" in query and
+                      len(params) == 1):
+                    username = params[0]
+                    if username == local_user:
+                        thread_local.fetchone_result = {'username': local_user, 'remain': thread_local.test_balance}
+                        print(f"余额查询成功: {username} -> {thread_local.test_balance}")
+                    else:
+                        thread_local.fetchone_result = None
+    
+                # 充值更新匹配
+                elif ("UPDATE users SET remain" in query and
+                      "WHERE username" in query and len(params) == 2):
+                    new_balance, username = params
+                    if username == local_user:
+                        thread_local.test_balance = new_balance
+                        mock_cursor.rowcount = 1
+                        print(f"充值成功: {username} -> {new_balance}")
+                    else:
+                        mock_cursor.rowcount = 0
+                    thread_local.fetchone_result = None
+    
+                # 注册查询匹配（用户是否存在检查）
+                elif ("SELECT username FROM users WHERE username" in query and
+                      len(params) == 1):
+                    username = params[0]
+                    if username == local_user and hasattr(thread_local, 'user_registered'):
+                        thread_local.fetchone_result = {'username': local_user}
+                    else:
+                        thread_local.fetchone_result = None
+                else:
+                    thread_local.fetchone_result = None
+            else:
+                thread_local.fetchone_result = None
+    
+        def mock_fetchone():
+            result = getattr(thread_local, 'fetchone_result', None)
+            print(f"fetchone 返回: {result}")
+            return result
+    
+        # 替换 execute 和 fetchone 方法
+        mock_cursor.execute.side_effect = mock_execute
+        mock_cursor.fetchone.side_effect = mock_fetchone
+    
+        with patch('backend.function_interface.mysql.connector.connect', return_value=mock_connection):
+            # 设置线程本地数据
+            thread_local.test_user = test_user
+            thread_local.test_password = test_password
+            thread_local.test_balance = initial_balance
+    
+            # 先注册用户
+            print("=== 注册用户 ===")
+            # 模拟注册过程：第一次查询用户不存在
+            def mock_fetchone_for_register():
+                if not hasattr(thread_local, 'user_registered'):
+                    thread_local.user_registered = True
+                    return None  # 用户不存在
+                return {'username': test_user}  # 注册后用户存在
+    
+            mock_cursor.fetchone.side_effect = mock_fetchone_for_register
+            register_result = Register(test_user, test_password, test_password)
+            print(f"注册结果: {register_result}")
+    
+            # 恢复正常的fetchone
+            mock_cursor.fetchone.side_effect = mock_fetchone
+    
+            # 登录测试
+            print("=== 登录测试 ===")
+            login_result = Login(test_user, test_password)
+            print(f"登录结果: {login_result}")
+    
+            # 调试信息
+            print(f"\n=== 调试信息 ===")
+            print(f"执行的SQL查询:")
+            for i, (query, params) in enumerate(executed_queries):
+                print(f"{i+1}. {query} | 参数: {params}")
+    
+            print(f"本地用户: {getattr(thread_local, 'test_user', 'NOT SET')}")
+            print(f"本地密码: {getattr(thread_local, 'test_password', 'NOT SET')}")
+            print(f"用户已注册: {hasattr(thread_local, 'user_registered')}")
+    
+>           assert login_result, "登录失败"
+E           AssertionError: 登录失败
+E           assert False
+
+tests\test_stress.py:292: AssertionError
+2025-11-25 22:11:06,630 [INFO] Test: tests/test_stress.py::test_script_execution_stress - PASSED
