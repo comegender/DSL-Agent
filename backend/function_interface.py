@@ -2,6 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 from . import AI_api as ai
 from . import yacc
+from frontend.terminal_ui import TUIManager
 
 ISLOGIN = False
 
@@ -149,19 +150,19 @@ def Recharge(username, x):
         )
         cursor = connection.cursor(dictionary=True)
 
-        cursor.execute("SELECT username, balance FROM users WHERE username = %s", (username,))
+        cursor.execute("SELECT username, remain FROM users WHERE username = %s", (username,))
         result = cursor.fetchone()
 
         if not result:
             print(f"错误：用户 '{username}' 不存在，无法充值")
             return False
 
-        current_balance = result['balance']
+        current_remain = result['remain']
 
 
-        new_balance = current_balance + x
+        new_remain = current_remain + x
 
-        cursor.execute("UPDATE users SET balance = %s WHERE username = %s", (new_balance, username))
+        cursor.execute("UPDATE users SET remain = %s WHERE username = %s", (new_remain, username))
 
         connection.commit()
 
@@ -205,14 +206,14 @@ def printRemain(username):
 
         cursor = connection.cursor(dictionary=True)
 
-        cursor.execute("SELECT username, balance FROM users WHERE username = %s", (username,))
+        cursor.execute("SELECT username, remain FROM users WHERE username = %s", (username,))
         result = cursor.fetchone()
 
         if not result:
             print(f"错误：用户 '{username}' 不存在，无法获取余额")
             return
 
-        remain = result['balance']
+        remain = result['remain']
         print(f"🤖:用户 {username} 的余额为：{remain}")
 
     except Error as e:
@@ -297,7 +298,7 @@ def Register(sub_username, sub_password, sub_password_2):
             return False
 
         insert_query = """
-        INSERT INTO users (username, password, balance)
+        INSERT INTO users (username, password, remain)
         VALUES (%s, %s, %s)
         """
         cursor.execute(insert_query, (sub_username, sub_password, 0))  # 余额初始化为 0
@@ -357,5 +358,7 @@ def writeCA(username, complaint, advice):
 
 def EX():
     print("🤖:感谢使用，再见！")
+    tui_manager = TUIManager()
+    tui_manager.show_exit_animation()
     import sys
     sys.exit(0)
