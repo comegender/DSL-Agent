@@ -1,3 +1,63 @@
+commit dcc82e7202d5ec5e04be927bac29329a64b9d110
+Author: comegender <3517999384@qq.com>
+Date:   Tue Nov 25 11:09:35 2025 +0800
+
+    version1.5 增加TUI
+
+commit d85540aec242db6664d56e8632566d57705e8528
+Author: comegender <3517999384@qq.com>
+Date:   Tue Nov 25 00:27:04 2025 +0800
+
+    完成version1.0开发，等待测试
+
+commit 2888b0e7a485774a738ed6daff417401d9631078
+Author: comegender <3517999384@qq.com>
+Date:   Mon Nov 24 22:20:46 2025 +0800
+
+    删除网页前端代码，转为TUI
+
+commit 7b7d6f6b39d96649908f2beb44d22f551cd078ef
+Author: comegender <3517999384@qq.com>
+Date:   Sun Nov 23 23:08:03 2025 +0800
+
+    GUI
+
+commit ae99f4dd7f93ca8d2b4734b071a84eeaba33ef5c
+Author: comegender <3517999384@qq.com>
+Date:   Sun Nov 23 22:34:17 2025 +0800
+
+    完成脚本语言的代码实现
+
+commit 4fa1ea6cc48dc8315cc0b651605963779006566b
+Author: comegender <3517999384@qq.com>
+Date:   Sun Nov 23 14:03:55 2025 +0800
+
+    修正脚本语言
+
+commit cb4679c0139a70c9e41265a48ddb18598bec5297
+Author: comegender <3517999384@qq.com>
+Date:   Sun Nov 23 11:37:43 2025 +0800
+
+    修正
+
+commit 51ab66bdf332fd9469cfa0e1cf8b2a8ec45c0a65
+Author: comegender <3517999384@qq.com>
+Date:   Sun Nov 23 11:33:40 2025 +0800
+
+    修正阻塞逻辑
+
+commit aa5ee33bd79855647286e81846370df93ab6dd41
+Author: comegender <3517999384@qq.com>
+Date:   Sun Nov 23 11:09:57 2025 +0800
+
+    修正if模块语法分析规则
+
+commit 760abdd73fe51ca57dc1e3891d86ae1820bfb0fd
+Author: comegender <3517999384@qq.com>
+Date:   Sun Nov 23 11:08:33 2025 +0800
+
+    更正脚本语言读入处理逻辑
+
 commit 08b0fc583620379ea98188e65cee282576f8c565
 Author: comegender <3517999384@qq.com>
 Date:   Sat Nov 22 23:48:43 2025 +0800
