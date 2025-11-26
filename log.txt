@@ -1,3 +1,27 @@
+commit edb5d3a70ae378630e946823adb51a39e0923f9f
+Author: comegender <3517999384@qq.com>
+Date:   Wed Nov 26 11:56:27 2025 +0800
+
+    去除调试信息
+
+commit 5e342a6a23e5d03093c55f3d30d9655fcada4697
+Author: comegender <3517999384@qq.com>
+Date:   Wed Nov 26 11:49:31 2025 +0800
+
+    修改测试脚本并测试
+
+commit 8afb52e52e8c18f69758220895c8a5729f750be8
+Author: comegender <3517999384@qq.com>
+Date:   Wed Nov 26 11:45:49 2025 +0800
+
+    version 2.0 修正修改密码逻辑
+
+commit 2e7a48ba0c59cd8fd97d60b4473fec3770a3ee29
+Author: comegender <3517999384@qq.com>
+Date:   Wed Nov 26 10:04:07 2025 +0800
+
+    开发日志
+
 commit 6e5a1c20fcdb945e18786acd5a94f005b7640ca0
 Author: comegender <3517999384@qq.com>
 Date:   Wed Nov 26 10:00:52 2025 +0800
