@@ -380,7 +380,6 @@ def confirmNewPassWord(username, newpassword):
             """
 
             record = (newpassword, username)
-            print(record)
             cursor.execute(update_query, record)
 
             connection.commit()
