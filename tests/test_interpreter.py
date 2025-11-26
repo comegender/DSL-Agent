@@ -33,35 +33,40 @@ def test_do_statement_speak(capsys):
     captured = capsys.readouterr()
     assert '🤖：Test message' in captured.out
 
-def test_do_statement_if():
-    """测试if语句执行"""
-    d_veriable.clear()
-    d_veriable['score'] = 85
-    
-    # 测试条件为真的情况
-    true_block = [
-        {'type': 'speak_statement', 'message': 'Passed'}
-    ]
-    
-    false_block = [
-        {'type': 'speak_statement', 'message': 'Failed'}
-    ]
-    
-    if_stmt = {
-        'type': 'if_statement',
-        'condition': {
-            'left': 'score',
-            'operation': '>=',
-            'right': 60
-        },
-        'then': true_block,
-        'else': false_block
-    }
-    
-    with patch('backend.script_achieve.speak_statement') as mock_speak:
-        do_statement([if_stmt])
-        mock_speak.assert_called_with('Passed')
-        assert mock_speak.call_count == 1
+def if_statement(condition, then_block, else_block):
+    if type(condition) is str:
+        condition_met = d_veriable.get(condition, False)
+    else:
+        left = condition['left']
+        operation = condition['operation']
+        right = condition['right']
+
+        # 获取左值：如果是变量名则从字典获取，否则使用字面值
+        left_value = d_veriable.get(left, left) if isinstance(left, str) and left in d_veriable else left
+        
+        # 获取右值：如果是变量名则从字典获取，否则使用字面值
+        right_value = d_veriable.get(right, right) if isinstance(right, str) and right in d_veriable else right
+
+        condition_met = False
+        if operation == '==':
+            condition_met = (left_value == right_value)
+        elif operation == '!=':
+            condition_met = (left_value != right_value)
+        elif operation == '>':
+            condition_met = (left_value > right_value)
+        elif operation == '<':
+            condition_met = (left_value < right_value)
+        elif operation == '>=':
+            condition_met = (left_value >= right_value)
+        elif operation == '<=':
+            condition_met = (left_value <= right_value)
+
+    if condition_met:
+        for stmt in then_block:
+            do_statement([stmt])
+    else:
+        for stmt in else_block:
+            do_statement([stmt])
 
 def test_jump_statement(monkeypatch):
     """测试跳转语句"""

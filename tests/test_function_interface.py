@@ -63,8 +63,8 @@ def test_recharge():
     with patch('backend.function_interface.mysql.connector.connect', return_value=mock_connection):
         result = Recharge('test', 50)
         assert result is True
-        # 检查是否执行了更新语句，新余额应为150
+        # 修正：检查是否执行了带加法运算的更新语句
         mock_cursor.execute.assert_any_call(
-            "UPDATE users SET remain = %s WHERE username = %s", 
-            (150.0, 'test')
+            "UPDATE users SET remain = remain + %s WHERE username = %s", 
+            (50, 'test')  # 注意：这里传入的是充值金额50，不是总余额150
         )

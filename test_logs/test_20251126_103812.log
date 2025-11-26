@@ -1,0 +1,73 @@
+2025-11-26 10:38:13,761 [INFO] Test: tests/test_ai_api.py::test_ai_api_basic - PASSED
+2025-11-26 10:38:13,764 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_recharge - PASSED
+2025-11-26 10:38:13,767 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_help - PASSED
+2025-11-26 10:38:13,771 [INFO] Test: tests/test_ai_api.py::test_ai_api_unknown_intent - PASSED
+2025-11-26 10:38:13,773 [INFO] Test: tests/test_function_interface.py::test_get_user_input - PASSED
+2025-11-26 10:38:13,777 [INFO] Test: tests/test_function_interface.py::test_login_success - PASSED
+2025-11-26 10:38:13,784 [INFO] Test: tests/test_function_interface.py::test_login_failure - PASSED
+2025-11-26 10:38:13,789 [INFO] Test: tests/test_function_interface.py::test_register_success - PASSED
+2025-11-26 10:38:14,038 [INFO] Test: tests/test_function_interface.py::test_recharge - FAILED
+2025-11-26 10:38:14,039 [ERROR] Test failed: tests/test_function_interface.py::test_recharge
+2025-11-26 10:38:14,040 [ERROR] Error details:
+def test_recharge():
+        """测试充值功能"""
+        # 模拟数据库查询和更新
+        mock_cursor = MagicMock()
+        mock_cursor.fetchone.return_value = {'username': 'test', 'remain': 100.0}
+    
+        mock_connection = MagicMock()
+        mock_connection.cursor.return_value = mock_cursor
+    
+        with patch('backend.function_interface.mysql.connector.connect', return_value=mock_connection):
+            result = Recharge('test', 50)
+            assert result is True
+            # 检查是否执行了更新语句，新余额应为150
+>           mock_cursor.execute.assert_any_call(
+                "UPDATE users SET remain = %s WHERE username = %s",
+                (150.0, 'test')
+            )
+
+tests\test_function_interface.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock name='mock.cursor().execute' id='1519835349456'>
+args = ('UPDATE users SET remain = %s WHERE username = %s', (150.0, 'test')), kwargs = {}
+expected = call('UPDATE users SET remain = %s WHERE username = %s', (150.0, 'test')), cause = None
+actual = [call('SELECT username, remain FROM users WHERE username = %s', ('test',)), call('UPDATE users SET remain = remain + %s WHERE username = %s', (50.0, 'test'))]
+expected_string = "execute('UPDATE users SET remain = %s WHERE username = %s', (150.0, 'test'))"
+
+    def assert_any_call(self, /, *args, **kwargs):
+        """assert the mock has been called with the specified arguments.
+    
+        The assert passes if the mock has *ever* been called, unlike
+        `assert_called_with` and `assert_called_once_with` that only pass if
+        the call is the most recent one."""
+        expected = self._call_matcher(_Call((args, kwargs), two=True))
+        cause = expected if isinstance(expected, Exception) else None
+        actual = [self._call_matcher(c) for c in self.call_args_list]
+        if cause or expected not in _AnyComparer(actual):
+            expected_string = self._format_mock_call_signature(args, kwargs)
+>           raise AssertionError(
+                '%s call not found' % expected_string
+            ) from cause
+E           AssertionError: execute('UPDATE users SET remain = %s WHERE username = %s', (150.0, 'test')) call not found
+
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1015: AssertionError
+2025-11-26 10:38:14,044 [INFO] Test: tests/test_interpreter.py::test_set_statement - PASSED
+2025-11-26 10:38:14,049 [INFO] Test: tests/test_interpreter.py::test_do_statement_speak - PASSED
+2025-11-26 10:38:14,052 [INFO] Test: tests/test_interpreter.py::test_do_statement_if - PASSED
+2025-11-26 10:38:14,055 [INFO] Test: tests/test_interpreter.py::test_jump_statement - PASSED
+2025-11-26 10:38:14,058 [INFO] Test: tests/test_lexer.py::test_lexer_keywords - PASSED
+2025-11-26 10:38:14,061 [INFO] Test: tests/test_lexer.py::test_lexer_operators - PASSED
+2025-11-26 10:38:14,063 [INFO] Test: tests/test_lexer.py::test_lexer_variables - PASSED
+2025-11-26 10:38:14,065 [INFO] Test: tests/test_lexer.py::test_lexer_strings_numbers - PASSED
+2025-11-26 10:38:14,068 [INFO] Test: tests/test_parser.py::test_parse_simple_script - PASSED
+2025-11-26 10:38:14,069 [INFO] Test: tests/test_parser.py::test_parse_if_statement - PASSED
+2025-11-26 10:38:14,072 [INFO] Test: tests/test_parser.py::test_parse_set_statement - PASSED
+2025-11-26 10:38:14,074 [INFO] Test: tests/test_script_processing.py::test_get_script - PASSED
+2025-11-26 10:38:14,075 [INFO] Test: tests/test_script_processing.py::test_get_script_en - PASSED
+2025-11-26 10:38:14,077 [INFO] Test: tests/test_script_processing.py::test_get_tree - PASSED
+2025-11-26 10:38:14,080 [INFO] Test: tests/test_script_processing.py::test_jump_to - PASSED
+2025-11-26 10:38:14,088 [INFO] Test: tests/test_stress.py::test_concurrent_login - PASSED
+2025-11-26 10:38:14,100 [INFO] Test: tests/test_stress.py::test_recharge_stress - PASSED
+2025-11-26 10:38:14,110 [INFO] Test: tests/test_stress.py::test_script_execution_stress - PASSED

@@ -1,0 +1,90 @@
+2025-11-26 11:46:01,290 [INFO] Test: tests/test_ai_api.py::test_ai_api_basic - PASSED
+2025-11-26 11:46:01,292 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_recharge - PASSED
+2025-11-26 11:46:01,297 [INFO] Test: tests/test_ai_api.py::test_ai_api_recognize_help - PASSED
+2025-11-26 11:46:01,299 [INFO] Test: tests/test_ai_api.py::test_ai_api_unknown_intent - PASSED
+2025-11-26 11:46:01,301 [INFO] Test: tests/test_function_interface.py::test_get_user_input - PASSED
+2025-11-26 11:46:01,305 [INFO] Test: tests/test_function_interface.py::test_login_success - PASSED
+2025-11-26 11:46:01,310 [INFO] Test: tests/test_function_interface.py::test_login_failure - PASSED
+2025-11-26 11:46:01,314 [INFO] Test: tests/test_function_interface.py::test_register_success - PASSED
+2025-11-26 11:46:01,318 [INFO] Test: tests/test_function_interface.py::test_recharge - PASSED
+2025-11-26 11:46:01,322 [INFO] Test: tests/test_interpreter.py::test_set_statement - PASSED
+2025-11-26 11:46:01,325 [INFO] Test: tests/test_interpreter.py::test_do_statement_speak - PASSED
+2025-11-26 11:46:01,461 [INFO] Test: tests/test_interpreter.py::test_do_statement_if - FAILED
+2025-11-26 11:46:01,461 [ERROR] Test failed: tests/test_interpreter.py::test_do_statement_if
+2025-11-26 11:46:01,462 [ERROR] Error details:
+def test_do_statement_if():
+        """测试if语句执行"""
+        d_veriable.clear()
+        d_veriable['score'] = 85
+    
+        # 测试条件为真的情况
+        true_block = [
+            {'type': 'speak_statement', 'message': 'Passed'}
+        ]
+    
+        false_block = [
+            {'type': 'speak_statement', 'message': 'Failed'}
+        ]
+    
+        if_stmt = {
+            'type': 'if_statement',
+            'condition': {
+                'left': 'score',
+                'operation': '>=',
+                'right': 60
+            },
+            'then': true_block,
+            'else': false_block
+        }
+    
+        with patch('backend.script_achieve.speak_statement') as mock_speak:
+>           do_statement([if_stmt])
+
+tests\test_interpreter.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\script_achieve.py:15: in do_statement
+    if_statement(i['condition'], i['then'], i['else'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = {'left': 'score', 'operation': '>=', 'right': 60}
+then_block = [{'message': 'Passed', 'type': 'speak_statement'}]
+else_block = [{'message': 'Failed', 'type': 'speak_statement'}]
+
+    def if_statement(condition, then_block, else_block):
+        if type(condition) is str:
+            condition_met = d_veriable.get(condition, False)
+        else:
+          left = condition['left']
+          operation = condition['operation']
+          right = condition['right']
+    
+          condition_met = False
+          if operation == '==':
+              condition_met = (d_veriable.get(left) == d_veriable.get(right))
+          elif operation == '!=':
+              condition_met = (d_veriable.get(left) != d_veriable.get(right))
+          elif operation == '>':
+              condition_met = (d_veriable.get(left) > d_veriable.get(right))
+          elif operation == '<':
+              condition_met = (d_veriable.get(left) < d_veriable.get(right))
+          elif operation == '>=':
+>             condition_met = (d_veriable.get(left) >= d_veriable.get(right))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E             TypeError: '>=' not supported between instances of 'int' and 'NoneType'
+
+backend\script_achieve.py:85: TypeError
+2025-11-26 11:46:01,464 [INFO] Test: tests/test_interpreter.py::test_jump_statement - PASSED
+2025-11-26 11:46:01,465 [INFO] Test: tests/test_lexer.py::test_lexer_keywords - PASSED
+2025-11-26 11:46:01,468 [INFO] Test: tests/test_lexer.py::test_lexer_operators - PASSED
+2025-11-26 11:46:01,470 [INFO] Test: tests/test_lexer.py::test_lexer_variables - PASSED
+2025-11-26 11:46:01,471 [INFO] Test: tests/test_lexer.py::test_lexer_strings_numbers - PASSED
+2025-11-26 11:46:01,472 [INFO] Test: tests/test_parser.py::test_parse_simple_script - PASSED
+2025-11-26 11:46:01,473 [INFO] Test: tests/test_parser.py::test_parse_if_statement - PASSED
+2025-11-26 11:46:01,474 [INFO] Test: tests/test_parser.py::test_parse_set_statement - PASSED
+2025-11-26 11:46:01,475 [INFO] Test: tests/test_script_processing.py::test_get_script - PASSED
+2025-11-26 11:46:01,476 [INFO] Test: tests/test_script_processing.py::test_get_script_en - PASSED
+2025-11-26 11:46:01,477 [INFO] Test: tests/test_script_processing.py::test_get_tree - PASSED
+2025-11-26 11:46:01,480 [INFO] Test: tests/test_script_processing.py::test_jump_to - PASSED
+2025-11-26 11:46:01,487 [INFO] Test: tests/test_stress.py::test_concurrent_login - PASSED
+2025-11-26 11:46:01,496 [INFO] Test: tests/test_stress.py::test_recharge_stress - PASSED
+2025-11-26 11:46:01,505 [INFO] Test: tests/test_stress.py::test_script_execution_stress - PASSED
