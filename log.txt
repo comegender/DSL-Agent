@@ -1,3 +1,33 @@
+commit 6e5a1c20fcdb945e18786acd5a94f005b7640ca0
+Author: comegender <3517999384@qq.com>
+Date:   Wed Nov 26 10:00:52 2025 +0800
+
+    upgrade
+
+commit 4e192584be9298eb3e7078d55ecc8e73ee29177d
+Author: comegender <3517999384@qq.com>
+Date:   Wed Nov 26 10:00:13 2025 +0800
+
+    验收答辩ppt
+
+commit 0131a9e6c9e203d646f7e56b773c3f2791929a6c
+Author: comegender <3517999384@qq.com>
+Date:   Tue Nov 25 22:28:00 2025 +0800
+
+    增加并发压力测试
+
+commit c1ddf72f41d750670b58d133e5ad3c2a790e2fd9
+Author: comegender <3517999384@qq.com>
+Date:   Tue Nov 25 21:06:16 2025 +0800
+
+    修改isLogin逻辑错误
+
+commit afff67f5ce84893f30c3b0b742395ad697e6e35f
+Author: comegender <3517999384@qq.com>
+Date:   Tue Nov 25 20:57:28 2025 +0800
+
+    增加测试模块
+
 commit dcc82e7202d5ec5e04be927bac29329a64b9d110
 Author: comegender <3517999384@qq.com>
 Date:   Tue Nov 25 11:09:35 2025 +0800
