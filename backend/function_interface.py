@@ -31,7 +31,7 @@ def getOriginalPassword(username):
             print(f"用户 {username} 不存在，无法获取密码")
             return None
 
-        return result['password']
+        return str(result['password'])
 
     except Exception as e:
         print(f"数据库错误: {e}")
@@ -69,8 +69,7 @@ def judgePassword(username, new_password):
             return False
 
         original_password = result['password']
-
-        return new_password == original_password
+        return new_password != original_password
 
     except Error as e:
         print(f"数据库错误: {e}")
@@ -157,12 +156,7 @@ def Recharge(username, x):
             print(f"错误：用户 '{username}' 不存在，无法充值")
             return False
 
-        current_remain = result['remain']
-
-
-        new_remain = current_remain + x
-
-        cursor.execute("UPDATE users SET remain = %s WHERE username = %s", (new_remain, username))
+        cursor.execute("UPDATE users SET remain = remain + %s WHERE username = %s", (x, username))
 
         connection.commit()
 
@@ -366,3 +360,36 @@ def EX():
     tui_manager.show_exit_animation()
     import sys
     sys.exit(0)
+
+def confirmNewPassWord(username, newpassword):
+    try:
+        connection = mysql.connector.connect(
+            host='127.0.0.1',
+            user='AI',
+            password='123456',
+            database='your_database'
+        )
+
+        if connection.is_connected():
+            cursor = connection.cursor()
+
+            update_query = """
+                UPDATE users 
+                SET password = %s
+                WHERE username = %s
+            """
+
+            record = (newpassword, username)
+            print(record)
+            cursor.execute(update_query, record)
+
+            connection.commit()
+
+    except Error as e:
+        print(f"数据库操作出错: {e}")
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+

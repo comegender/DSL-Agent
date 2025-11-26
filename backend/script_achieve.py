@@ -25,7 +25,7 @@ def call_statement(func_name):
             body = i['body']
             do_statement(body)
     elif func_name == 'judgePassword':
-        return fi.judgePassword(d_veriable.get('userName', ''), d_veriable.get('newPassword', ''))
+        return fi.judgePassword(d_veriable.get('userName', ''), d_veriable.get('new_password', ''))
     elif func_name == 'getUserInformation':
         return fi.getUserInformation(d_veriable.get('userName', ''))
     elif func_name == 'Recharge':
@@ -44,6 +44,8 @@ def call_statement(func_name):
         return fi.writeCA(d_veriable.get('userName', ''),d_veriable.get('complaint', ''),d_veriable.get('advice', ''))
     elif func_name == 'EX':
         fi.EX()
+    elif func_name == 'confirmNewPassWord':
+        return fi.confirmNewPassWord(d_veriable.get('userName', ''), d_veriable.get('new_password', ''))
 
 def set_statement(var_name, value):
     if type(value) is dict and value.get('type') == 'call_statement':
@@ -72,17 +74,17 @@ def if_statement(condition, then_block, else_block):
 
       condition_met = False
       if operation == '==':
-          condition_met = (d_veriable.get(left) == right)
+          condition_met = (d_veriable.get(left) == d_veriable.get(right))
       elif operation == '!=':
-          condition_met = (d_veriable.get(left) != right)
+          condition_met = (d_veriable.get(left) != d_veriable.get(right))
       elif operation == '>':
-          condition_met = (d_veriable.get(left) > right)
+          condition_met = (d_veriable.get(left) > d_veriable.get(right))
       elif operation == '<':
-          condition_met = (d_veriable.get(left) < right)
+          condition_met = (d_veriable.get(left) < d_veriable.get(right))
       elif operation == '>=':
-          condition_met = (d_veriable.get(left) >= right)
+          condition_met = (d_veriable.get(left) >= d_veriable.get(right))
       elif operation == '<=':
-          condition_met = (d_veriable.get(left) <= right)
+          condition_met = (d_veriable.get(left) <= d_veriable.get(right))
 
     if condition_met:
         do_statement(then_block)
