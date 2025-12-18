@@ -1,0 +1,153 @@
+do begin {
+	speak "欢迎光临智能餐厅点餐系统！";
+	speak "我可以帮您点餐、查询菜单、结账等";
+	speak "请告诉我您需要什么服务？";
+	set userInput = @content@;
+    call AI_Interface;
+}
+#
+do restaurant_main {
+	set userInput = @content@;
+	set option1 = "点餐";
+	set option2 = "菜单";
+	set option3 = "结账";
+	set option4 = "帮助";
+	set option5 = "退出";
+	
+	if (userInput == option1) {
+		jump order_food;
+	}
+	else {
+		if (userInput == option2) {
+			jump show_menu;
+		}
+		else {
+			if (userInput == option3) {
+				jump checkout;
+			}
+			else {
+				if (userInput == option4) {
+					jump help_info;
+				}
+				else {
+					if (userInput == option5) {
+						jump exit;
+					}
+					else {
+						speak "请选择：点餐、菜单、结账、帮助 或 退出";
+						jump restaurant_main;
+					}
+				}
+			}
+		}
+	}
+}
+#
+do order_food {
+	speak "请选择菜品类别：";
+	speak "1.主食 2.饮料 3.甜点";
+	set food_type = @content@;
+	set type1 = "1";
+	set type2 = "2";
+	set type3 = "3";
+	
+	if (food_type == type1) {
+		speak "可选主食：";
+		speak "牛肉面 25元";
+		speak "披萨 35元";
+		speak "炒饭 20元";
+	}
+	else {
+		if (food_type == type2) {
+			speak "可选饮料：";
+			speak "可乐 8元";
+			speak "果汁 12元";
+			speak "咖啡 15元";
+		}
+		else {
+			if (food_type == type3) {
+				speak "可选甜点：";
+				speak "蛋糕 18元";
+				speak "冰淇淋 10元";
+				speak "布丁 12元";
+			}
+			else {
+				speak "请输入有效的类别编号";
+				jump order_food;
+			}
+		}
+	}
+	
+	speak "请输入您要点的菜品名称：";
+	set food_name = @content@;
+	speak "请输入数量：";
+	set quantity = @content@;
+	
+	set order_status = "成功";
+	set success_flag = "成功";
+	if (order_status == success_flag) {
+		speak "添加成功！是否继续点餐？(是/否)";
+		set continue_order = @content@;
+		set yes_option = "是";
+		set no_option = "否";
+		if (continue_order == yes_option) {
+			jump order_food;
+		}
+		else {
+			if (continue_order == no_option) {
+				jump restaurant_main;
+			}
+			else {
+				speak "请输入是或否";
+				jump order_food;
+			}
+		}
+	}
+	else {
+		speak "点餐失败，请重试";
+		jump order_food;
+	}
+}
+#
+do show_menu {
+	speak "今日菜单：";
+	speak "主食：牛肉面25元、披萨35元、炒饭20元";
+	speak "饮料：可乐8元、果汁12元、咖啡15元";
+	speak "甜点：蛋糕18元、冰淇淋10元、布丁12元";
+	jump restaurant_main;
+}
+#
+do checkout {
+	speak "正在计算订单总金额...";
+	set total_amount = "0";
+	set payment_status = "成功";
+	set success_flag = "成功";
+	
+	if (payment_status == success_flag) {
+		speak "支付成功！感谢光临！";
+		jump exit;
+	}
+	else {
+		speak "支付失败，请重试";
+		jump checkout;
+	}
+}
+#
+do help_info {
+	speak "使用说明：";
+	speak "点餐：选择菜品并下单";
+	speak "菜单：查看所有可选菜品";
+	speak "结账：完成支付";
+	speak "帮助：查看使用说明";
+	speak "退出：结束点餐";
+	jump restaurant_main;
+}
+#
+do exit {
+	speak "感谢光临智能餐厅，期待再次为您服务！";
+}
+#
+do default {
+	speak "该功能正在开发中...";
+	jump restaurant_main;
+}

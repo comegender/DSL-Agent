@@ -1,0 +1,118 @@
+do begin {
+	speak "您好！欢迎使用智能医院挂号系统！";
+	speak "我可以帮您进行挂号、查询医生信息等操作";
+	speak "请告诉我您需要什么服务？";
+    set userInput = @content@;
+    call AI_Interface;
+}
+#
+do main_menu {
+	set userInput = @content@;
+	set option1 = "挂号";
+	set option2 = "查询";
+	set option3 = "取消";
+	set option4 = "退出";
+	set success_flag = "成功";
+	set fail_flag = "失败";
+	
+	if (userInput == option1) {
+		jump register_patient;
+	}
+	else {
+		if (userInput == option2) {
+			jump query_info;
+		}
+		else {
+			if (userInput == option3) {
+				jump cancel_registration;
+			}
+			else {
+				if (userInput == option4) {
+					jump exit;
+				}
+				else {
+					speak "抱歉，我没有理解您的需求";
+					speak "请选择：挂号、查询、取消 或 退出";
+					jump main_menu;
+				}
+			}
+		}
+	}
+}
+#
+do register_patient {
+	speak "请选择科室：";
+	speak "1.内科 2.外科 3.儿科 4.妇产科";
+	set department = @content@;
+	speak "请选择就诊时间（格式：YYYY-MM-DD）：";
+	set visit_time = @content@;
+	speak "请输入您的姓名：";
+	set patient_name = @content@;
+	
+	set registration_status = "成功";
+	set expected_status = "成功";
+	if (registration_status == expected_status) {
+		speak "挂号成功！";
+		speak "您的挂号信息已记录";
+		jump ask_continue;
+	}
+	else {
+		speak "挂号失败，请重试";
+		jump register_patient;
+	}
+}
+#
+do query_info {
+	speak "当前可预约医生信息：";
+	speak "1. 张医生 - 内科 - 周一至周五";
+	speak "2. 李医生 - 外科 - 周二、周四";
+	speak "3. 王医生 - 儿科 - 周一、周三、周五";
+	speak "4. 赵医生 - 妇产科 - 周三、周六";
+	jump ask_continue;
+}
+#
+do cancel_registration {
+	speak "请输入您的挂号编号：";
+	set registration_id = @content@;
+	speak "正在验证挂号信息...";
+	set cancel_status = "成功";
+	set success_flag = "成功";
+	if (cancel_status == success_flag) {
+		speak "取消挂号成功！";
+		jump ask_continue;
+	}
+	else {
+		speak "取消挂号失败，请检查挂号编号";
+		jump cancel_registration;
+	}
+}
+#
+do ask_continue {
+	speak "是否还需要其他服务？(是/否)";
+	set continue_choice = @content@;
+	set yes_option = "是";
+	set no_option = "否";
+	if (continue_choice == yes_option) {
+		speak "请选择服务：挂号、查询、取消";
+		jump main_menu;
+	}
+	else {
+		if (continue_choice == no_option) {
+			speak "感谢使用医院挂号系统，祝您健康！";
+			jump exit;
+		}
+		else {
+			speak "请输入是或否";
+			jump ask_continue;
+		}
+	}
+}
+#
+do exit {
+	speak "系统退出，再见！";
+}
+#
+do default {
+	speak "该功能暂未开放，敬请期待！";
+	jump ask_continue;
+}
