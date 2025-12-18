@@ -134,6 +134,7 @@ def jump_to(x):
     s=test_script.get_script_en(x)
         # ========== 执行解析 ==========
     result = parser.parse(s)
+    # print(result)
     return result
 
 if __name__ == "__main__":

@@ -45,6 +45,7 @@ def getOriginalPassword(username):
 
 def AI_Interface(x):
     r = ai.get_response(x)
+    print(r)
     return yacc.get_tree(r)
 
 def judgePassword(username, new_password):

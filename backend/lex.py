@@ -58,7 +58,6 @@ def t_STRING(t):
     t.value = t.value[1:-1]  # 去除引号
     return t
 
-
 # 数字（整数和浮点数）
 def t_NUMBER(t):
     r'\d+\.?\d*'
